@@ -1,0 +1,18 @@
+@use 'reset' as *;
+@use 'normalize' as *;
+@use 'fonts'  as *;
+@use 'media' as m;
+@use 'utils';
+@use 'global' as *;
+
+#root{
+    box-sizing: border-box;
+    padding: 1.25rem 6.25rem;
+    max-width: 90rem;
+    height: 100vh;
+    margin: 0 auto;
+
+    @include m.tablet{
+        padding-inline: 2.25rem;
+    }
+}
