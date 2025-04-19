@@ -1,9 +1,17 @@
+import { Outlet } from 'react-router'
 import './style/App.scss'
 import c from './style/pon.module.scss'
 
-console.log(c)
 export const App = () => {
   return (
-    <div className={c.pont}> Hellsfsdsdffdo</div>
+    <>
+    <header>
+      bla bla
+    </header>
+    <main>
+      <nav></nav>
+      <Outlet />
+    </main>
+    </>
   )
 }

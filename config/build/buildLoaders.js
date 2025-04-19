@@ -7,7 +7,8 @@ export function buildLoaders(options){
         loader: "css-loader",
         options: {
             modules: {
-                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]'
+                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]',
+                namedExport: false,
             },
         },
     }
