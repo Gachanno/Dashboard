@@ -3,6 +3,32 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 export function buildLoaders(options){
     const isDev = options.mode === 'development'
 
+    const assetLoader = {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+    }
+
+    const svgrLoader = {
+        test: /\.svg$/i,
+        use: [
+            {
+                loader: '@svgr/webpack',
+                options: {
+                    icon: true,
+                    svgoConfig: {
+                        plugins: [
+                            {
+                                name: 'convertColors',
+                                params: {
+                                    currentColor: true,
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+    }
     const cssLoaderWithModules = {
         loader: "css-loader",
         options: {
@@ -29,6 +55,8 @@ export function buildLoaders(options){
     }
 
     return [
+        assetLoader,
+        svgrLoader,
         scssLoader,
         tsLoader
     ]
