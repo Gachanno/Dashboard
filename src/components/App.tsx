@@ -1,12 +1,13 @@
-import { Link, Outlet } from 'react-router'
-import '@/style/App.scss'
-import c from '@/style/pon.module.scss'
+import { Outlet } from 'react-router'
+import '@/components/style/App.scss'
+import c from './style/style.module.scss'
+import Sidebar from './sidebar'
 
 export const App = () => {
   return (
     <>
-    <header>
-      <Link to='/'>Financial Dashboard</Link>
+    <header className={c.header}>
+      <Sidebar/>
     </header>
     <main>
       <nav></nav>

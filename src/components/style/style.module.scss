@@ -1,0 +1,14 @@
+.header{
+    overflow: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.188rem;
+    min-width: 20vw;
+    height: 100%;
+    padding: 1.25rem 0.625rem;
+    background-color: #FFFFFF;
+    -webkit-box-shadow: 5px 0px 10px 0px rgba(208, 206, 206, 0.4);
+    -moz-box-shadow: 5px 0px 10px 0px rgba(208, 206, 206, 0.4);
+    box-shadow: 5px 0px 10px 0px rgba(208, 206, 206, 0.4);
+}

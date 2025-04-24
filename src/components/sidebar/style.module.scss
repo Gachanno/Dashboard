@@ -1,0 +1,95 @@
+.sidebar{
+    &__logo{
+        max-width: 100%;
+        font-size: 1.5rem;
+    }
+
+    &__widgets{
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.563rem;
+    }
+
+    &__widget{
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.938rem;
+        padding: 1.25rem 0.938rem;
+
+        &--blue{
+            background-color: #EFF6FF;
+        }
+
+        &--green{
+            background-color: #F0FDF4;
+        }
+
+        &--purple{
+            background-color: #FBF5FF;
+        }
+
+        &-header{
+            display: flex;
+            align-items: center;
+            column-gap: 0.625rem;
+        }
+    }
+}
+
+.widget{
+    &__icon{
+        min-height: 20px;
+        min-width: 20px;
+    }
+
+    &__title{
+        color: #464C58;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    &__number{
+        font-size: 1.875rem;
+        font-weight: 700;
+    }
+
+    &__text--small{
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94909B;
+    }
+
+    &__transaction{
+        &-wrapper{
+            display: grid;
+            row-gap: 0.625rem;
+            grid-template-areas:
+                        "tittle value"
+                        "date value";
+        }
+
+        &-tittle{
+            font-weight: 700;
+            grid-area: tittle;
+        }
+
+        &-date{
+            grid-area: date;
+        }
+
+        &-value{
+            grid-area: value;
+            align-self: center;
+            justify-self: end;
+            font-weight: 700;
+
+            &--positive{
+                color: #18db0d;
+            }
+
+            &--negative{
+                color: #EA7383;
+            }
+        }
+    }
+}
