@@ -5,7 +5,6 @@ import ChartsIncrease from '@/assets/icons/increase.svg'
 import ChartsDecrease from '@/assets/icons/decrease.svg'
 import Dollar from '@/assets/icons/dollar.svg'
 
-console.log(c)
 const Sidebar = () => {
     return (
         <>
