@@ -1,7 +1,7 @@
 export default [
     {
         "id": "txn-1001",
-        "date": "2025-04-07T18:34:24Z",
+        "date": "2025-03-07T18:34:24Z",
         "description": "Weekly Market Purchase",
         "amount": 297.65,
         "type": "expense",

@@ -1,0 +1,33 @@
+.sidebar{
+    &__widget{
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.938rem;
+        padding: 1.25rem 0.938rem;
+
+        &-header{
+            display: flex;
+            align-items: center;
+            column-gap: 0.625rem;
+        }
+    }
+}
+
+.widget{
+    &__title{
+        color: #464C58;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    &__number{
+        font-size: 1.875rem;
+        font-weight: 700;
+    }
+
+    &__text--small{
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94909B;
+    }
+}
