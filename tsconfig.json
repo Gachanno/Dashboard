@@ -5,13 +5,14 @@
         "module": "ESNext",
         "target": "es5",
         "jsx": "react-jsx",
+        "jsxImportSource": "react", 
         "allowJs": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
-            "@/": ["./src/*"]
+            "@/*": ["./src/*"]
         }
     },
     "ts-node": {
