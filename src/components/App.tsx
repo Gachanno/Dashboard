@@ -1,16 +1,17 @@
 import { Outlet } from 'react-router'
 import '@/components/style/App.scss'
-import c from './style/style.module.scss'
+import s from './style/style.module.scss'
 import Sidebar from './sidebar'
+import Navigation from './navigation'
 
 export const App = () => {
   return (
     <>
-    <header className={c.header}>
+    <header className={s.header}>
       <Sidebar/>
     </header>
-    <main>
-      <nav></nav>
+    <main className={s.main}>
+      <Navigation/>
       <Outlet />
     </main>
     </>

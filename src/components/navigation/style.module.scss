@@ -1,0 +1,22 @@
+.navigation{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 2.5rem;
+    padding: 1.25rem 0.625rem 0 0.625rem;
+    border-bottom: 0.125rem solid #EEEFF1; 
+    border-collapse: collapse;
+
+}
+
+.link{
+    padding: 10px;
+    margin-bottom: -0.125rem;  
+    border-bottom: 0.125rem solid transparent; 
+    transition: border-color 0.5s;
+
+    &--active{
+        border-bottom: 0.125rem solid #5B80BE; 
+        border-collapse: collapse;
+    }
+}
