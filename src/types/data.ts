@@ -13,6 +13,7 @@ interface ITransaction {
         type: 'income' | 'expense',
         category: string,
     }[];
+    pages?: number; 
     page?: number;
     limit?: number;
 }

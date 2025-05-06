@@ -1,0 +1,120 @@
+.main{
+    padding: 0.625rem 1.25rem 12.5rem 1.25rem;
+}
+
+.table{
+    width: 100%;
+    padding: 1.25rem 0.625rem;
+    border-collapse: collapse;
+
+    thead tr{
+        background-color: #c5d3e9;
+    }
+
+    thead th{
+        user-select: none;
+    }
+
+    th,
+    td{
+        padding: 0.625rem 0.313rem;
+    }
+
+    tbody tr{
+        border: 0.063rem solid #87898a;
+    }
+
+    &__wrapper{
+        padding: 1.25rem 0.625rem;
+        border-radius: 0.625rem;
+        background-color: white;
+    }
+
+    &__row-income{
+        background-color: #f5fff8;
+    }
+
+    &__row-expense{
+        background-color: #ffe8eb;
+    }
+
+}
+
+.pagination{
+    &__wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        column-gap: 0.625rem;
+        padding: 0.625rem;
+    }
+
+    &__page{
+        cursor: pointer;
+        padding: 0.313rem;
+        background-color: transparent;
+        border: 0;
+        font-size: 1.25rem;
+        color: black;
+        transition: color 0.5s;
+
+        &--active{
+            color: #7C7E7F;
+        }
+    }
+
+    &__pages{
+        display: flex;
+        align-items: center;
+        column-gap: 0.313rem;
+    }
+}
+
+.arrow{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 0;
+    padding: 0.313rem 0.625rem;
+    background-color: transparent;
+
+    &__wrapper{
+        display: flex;
+    }
+
+    &--left{
+        transform: scale(-1, 1)
+    }
+
+    &__order{
+        display: inline-block;
+        width: 0; 
+        height: 0;
+        transform: rotate(180deg);
+        margin: 4px 5px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid black;
+        transition: transform 0.5s;
+
+        &--asc{
+            transform: rotate(0deg);
+        }
+
+        &--desc{
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.text{
+    &--center{
+        text-align: center;
+    }
+    &--left{
+        text-align: left;
+    }
+    &--right{
+        text-align: right;
+    }
+}

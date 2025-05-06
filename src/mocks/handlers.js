@@ -5,7 +5,23 @@ import transactions from './data/transactions.js'
 import income from './data/income.js'
 import expense from './data/expense.js'
 
+const sortedBy = (field, order) =>{
+  const multiplier = order === 'desc' ? -1 : 1;
+  return (a, b) => {
+    let va = a[field], vb = b[field];
 
+    if (field === 'date') {
+      va = new Date(va);
+      vb = new Date(vb);
+    }
+
+    if (typeof va === 'number' && typeof vb === 'number') {
+      return (va - vb) * multiplier;
+    }
+
+    return String(va).localeCompare(String(vb)) * multiplier;
+  };
+}
 
 const summaryStatsResolver = () => {
   return HttpResponse.json(summaryStats);
@@ -15,17 +31,14 @@ const summaryStatsHandler = http.get("/api/summaryStats", summaryStatsResolver);
 
 const transactionsResolver = (req) => {
   const {length} = transactions
+  const url = new URL(req.request.url)
   
-  const limitParam = new URL(req.request.url)
-  .searchParams
-  .get('limit')
-  const pageParam = new URL(req.request.url)
-  .searchParams
-  .get('page')
+  const limit = parseInt(url.searchParams.get('limit'), 10) ?? length
+  let page = parseInt(url.searchParams.get('page'), 10) || 1
+  
+  const sortField = url.searchParams.get('sortBy') ?? 'id';
+  const sortOrder   = url.searchParams.get('order') ?? 'asc';
 
-  const limit = limitParam ? parseInt(limitParam, 10) : length
-  let page = pageParam ? parseInt(pageParam, 10) : 1
-  
   const maxPages = Math.ceil(length / limit)
   if (page > maxPages) {
     page = maxPages
@@ -35,12 +48,17 @@ const transactionsResolver = (req) => {
   let endSlice = limit
 
   if (page !== 1){
-    startSlice = limit * (page - 1) - 1
-    endSlice = limit * page - 1
+    startSlice = limit * (page - 1)
+    endSlice = limit * page
   }
-  const resultTransactions = transactions.slice(startSlice, endSlice)
+
+  const resultTransactions = transactions
+  .toSorted((a, b) => sortedBy(sortField, sortOrder)(a, b))
+  .slice(startSlice, endSlice)
+  
   const result = {
     transactions: [...resultTransactions],
+    pages: maxPages,
     page,
     limit
   }
@@ -58,8 +76,9 @@ const recentTransactionsResolver = (req) => {
   const limit = limitParam ? parseInt(limitParam, 10) : 5
 
   const resultTransactions = transactions
-  .sort((a, b) => -a.date.localeCompare(b.date))
+  .toSorted((a, b) => -a.date.localeCompare(b.date))
   .slice(0, limit)
+
   const result = {
     transactions: [...resultTransactions],
     limit

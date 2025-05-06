@@ -1,22 +1,30 @@
 .navigation{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    column-gap: 2.5rem;
-    padding: 1.25rem 0.625rem 0 0.625rem;
-    border-bottom: 0.125rem solid #EEEFF1; 
-    border-collapse: collapse;
+    &__list{
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        column-gap: 2.5rem;
+        padding: 1.875rem 0.625rem 0 0.625rem;
+        border-bottom: 0.188rem solid #EEEFF1; 
+        border-collapse: collapse;
+    }
 
 }
 
 .link{
-    padding: 10px;
-    margin-bottom: -0.125rem;  
-    border-bottom: 0.125rem solid transparent; 
-    transition: border-color 0.5s;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    column-gap: 0.438rem;
+    padding: 0.938rem 0.625rem;
+    font-weight: 600;
+    color: #7C7E7F;
+    margin-bottom: -0.188rem;  
+    border-bottom: 0.188rem solid transparent; 
+    transition: color 0.5s, border 0.5s;
 
     &--active{
-        border-bottom: 0.125rem solid #5B80BE; 
-        border-collapse: collapse;
+        color: #005ffb;
+        border-bottom: 0.188rem solid #005ffb; 
     }
 }
