@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import tableFiltersReducer from './tableFiltersSlice'
+import tableReducer from './tableSlice'
 
 export const store = configureStore({
   reducer: {
-    tableFilters: tableFiltersReducer,
+    table: tableReducer,
   },
 })
 

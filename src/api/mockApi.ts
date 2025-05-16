@@ -14,7 +14,8 @@ class Requests{
     }
 
     async getTransactions({ page, limit, sortBy, order, filter }:ITransactionsParams){
-        const searchParams = `?page=${page}&limit=${limit}&sortBy=${sortBy}&order=${order}&filter=${filter}`
+        const filterJson = JSON.stringify(filter)
+        const searchParams = `?page=${page}&limit=${limit}&sortBy=${sortBy}&order=${order}&filter=${filterJson}`
         const { data } = await axios.get<ITransaction>(this.URL + `/transactions${searchParams}`)
         return data
     }

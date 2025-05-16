@@ -23,7 +23,10 @@ interface ITransactionsParams {
     limit?: number;
     sortBy?: string;
     order?: 'asc'|'desc';
-    filter?: string
+    filter?: {
+        min?: number;
+        max?: number;
+    }
 }
 
 interface IIncome {

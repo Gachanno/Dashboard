@@ -23,6 +23,12 @@ const sortedBy = (field, order) =>{
   };
 }
 
+const filterTransaction = (filter, value) =>{
+  if(filter.max < value) return false
+  if(filter.min > value) return false
+  return true
+}
+
 const summaryStatsResolver = () => {
   return HttpResponse.json(summaryStats);
 };
@@ -30,14 +36,18 @@ const summaryStatsResolver = () => {
 const summaryStatsHandler = http.get("/api/summaryStats", summaryStatsResolver);
 
 const transactionsResolver = (req) => {
-  const {length} = transactions
   const url = new URL(req.request.url)
   
+  const filter = JSON.parse(url.searchParams.get('filter'))
+
   const limit = parseInt(url.searchParams.get('limit'), 10) ?? length
   let page = parseInt(url.searchParams.get('page'), 10) || 1
-  
+
   const sortField = url.searchParams.get('sortBy') ?? 'id';
   const sortOrder   = url.searchParams.get('order') ?? 'asc';
+
+  const filteredTransactions = transactions.filter(({amount}) => filterTransaction(filter, amount))
+  const {length} = filteredTransactions
 
   const maxPages = Math.ceil(length / limit)
   if (page > maxPages) {
@@ -52,7 +62,7 @@ const transactionsResolver = (req) => {
     endSlice = limit * page
   }
 
-  const resultTransactions = transactions
+  const resultTransactions = filteredTransactions
   .toSorted((a, b) => sortedBy(sortField, sortOrder)(a, b))
   .slice(startSlice, endSlice)
   

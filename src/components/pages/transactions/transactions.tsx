@@ -1,11 +1,16 @@
 import { requestsService } from '@/api/mockApi'
 import s from './style.module.scss'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { getPagination } from '@/components/pagination'
 import ArrowIcon from '@/assets/icons/arrow.svg'
-import Select, { SingleValue } from 'react-select'
-import { TFilter, TLimitOption } from './type'
+import Select from 'react-select'
+import { TLimitOption, TSortBy } from './type'
+import { RootState } from '@/store/store'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import * as actionTable from '@/store/tableSlice'
+import { TFilter } from './type'
+import { filterConfig, FormDataI, initialState } from './filterFormConfig'
 
 const limitOptions: TLimitOption[] = [
   { value: 10, label: '10' },
@@ -16,22 +21,59 @@ const limitOptions: TLimitOption[] = [
 ];
 
 const Transactions = () => {
-  const [page, setPage] = useState(1)
-  const [pages, setPages] = useState(1)
+  const [formState, setFormState] = useState(initialState)
+
+  const onInput = (e: ChangeEvent<HTMLInputElement>) => {
+    let {value, name} = e.target
+
+    if (value != "") {
+      if (parseInt(value) < parseInt(e.target.min)) {
+          value = '';
+      }
+      if (parseInt(value) > parseInt(e.target.max)) {
+          value = e.target.max;   
+      }
+    }
+
+    value = value.replace(/[^0-9]/g, '')
+
+    setFormState((prev:FormDataI) => ({
+      ...prev, 
+      [name]: value
+    }))
+  }
+
+  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const data:Record<string, string> = {};
+    formData.forEach((value, key) => {
+      data[key] = value.toString()
+    })
+    setFilter(data)
+  }
+
+  const {page, pages, limit, sort, filter} = useAppSelector((state: RootState) => state.table)
+
+  const dispatch = useAppDispatch()
+  const setPage = (page:number) => dispatch(actionTable.setPage(page))
+  const setPages = (pages:number) => dispatch(actionTable.setPages(pages))
+  const setLimit = (limit:number) => dispatch(actionTable.setLimit(limit))
+  const setSort = (sortBy:TSortBy) => dispatch(actionTable.setSort(sortBy))
+  const setFilter = (filter:TFilter) => dispatch(actionTable.setFilter(filter))
+  const clearFilter = () => dispatch(actionTable.clearFilter())
+  const defaultSort = () => dispatch(actionTable.defaultSort())
+
   const { pagesElement, activeIndex } = getPagination(page, pages)
-  const [limit, setLimit] = useState(10)
-  const [filter, setFilter] = useState<TFilter>({
-    sortBy: 'id',
-    order: 'asc'
-  })
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['list transactions', page, limit, filter],
+    queryKey: ['list transactions', page, limit, sort, filter],
     queryFn: () => requestsService.getTransactions({
       page,
       limit,
-      sortBy: filter.sortBy,
-      order: filter.order
+      sortBy: sort.sortBy,
+      order: sort.order,
+      filter
     }),
     placeholderData: (prev) => prev,
     staleTime: 300000,
@@ -43,111 +85,129 @@ const Transactions = () => {
     }
   }, [data?.pages])
 
-  const handleLimitChange = (option: SingleValue<TLimitOption>) => {
-    if (option) {
-      setLimit(option.value);
-      setPage(1);
-    }
-  }
-
-  const editFilter = (sortBy:string) =>{
-    if(sortBy == filter.sortBy){
-      setFilter({
-        ...filter,
-        order: filter.order === 'asc' ? 'desc' : 'asc'
-        })
-    }
-    else{
-      setFilter({
-        sortBy,
-        order: 'asc'
-        })
-    }
-  }
-
-  const clearFilter = () =>{
-    setFilter({
-      sortBy: 'id',
-      order: 'asc'
-    })
-  }
+  const memoizedTbody = useMemo(
+    () => data?.transactions.map((element) =>
+      <tr
+      className={element.type === 'income' ?
+      s['table__row-income']
+      :
+      s['table__row-expense']}
+      key={element.id}>
+        <th scope="row">
+          {element.id}
+          </th>
+        <td className={s['text--left']}>
+          {element.description}
+          </td>
+        <td className={s['text--left']}>
+          {element.type}
+          </td>
+        <td className={s['text--left']}>
+          {element.category}
+          </td>
+        <td className={s['text--center']}>
+          {(new Date(element.date)).toISOString().split('T')[0]}</td>
+        <td className={s['text--right']}>
+          {element.amount} $
+          </td>
+      </tr>
+    ),
+  [data?.transactions])
 
   return (
     <main className={s.main}>
       <h1>Transactions</h1>
       <section className={s.table__wrapper}>
+        <form action="" className={s.filter__form} onSubmit={onSubmit}>
+          <h2>Фильтры</h2>
+          {filterConfig.map(({label, ...item}) =>{ 
+          return(
+            <div className={s.filter__wrapper} key={item.name}>
+              <label htmlFor={item.id}>{label}</label>
+              <input
+              {...item}
+              value={formState[item.name]}
+              className={s.filter__input}
+              onInput={onInput}/>
+            </div>
+            )})}
+          <div className={s.filter__buttons}>
+            <input type="reset" value="Отменить" className={s.filter__reset} onClick={clearFilter}/>
+            <input type="submit" value="Применить" className={s.filter__submit}/>
+          </div>
+        </form>
         <table className={s.table}>
           <thead>
             <tr>
               <th scope="col"
-              onClick={() => editFilter('id')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('id')}
+              onDoubleClick={defaultSort}>
                 id
                 {
-                  filter.sortBy === 'id'
+                  sort.sortBy === 'id'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
               <th scope="col" className={s['text--left']} 
-              onClick={() => editFilter('description')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('description')}
+              onDoubleClick={defaultSort}>
                 description
                 {
-                  filter.sortBy === 'description'
+                  sort.sortBy === 'description'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
               <th scope="col" className={s['text--left']} 
-              onClick={() => editFilter('type')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('type')}
+              onDoubleClick={defaultSort}>
                 type
                 {
-                  filter.sortBy === 'type'
+                  sort.sortBy === 'type'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
               <th scope="col" className={s['text--left']} 
-              onClick={() => editFilter('category')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('category')}
+              onDoubleClick={defaultSort}>
                 category
                 {
-                  filter.sortBy === 'category'
+                  sort.sortBy === 'category'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
               <th scope="col" 
-              onClick={() => editFilter('date')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('date')}
+              onDoubleClick={defaultSort}>
                 date
                 {
-                  filter.sortBy === 'date'
+                  sort.sortBy === 'date'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
               <th scope="col" className={s['text--right']} 
-              onClick={() => editFilter('amount')}
-              onDoubleClick={clearFilter}>
+              onClick={() => setSort('amount')}
+              onDoubleClick={defaultSort}>
                 amount
                 {
-                  filter.sortBy === 'amount'
+                  sort.sortBy === 'amount'
                   &&
                   <div
-                  className={`${s.arrow__order} ${filter.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
+                  className={`${s.arrow__order} ${sort.order === 'asc' ? s['arrow__order--asc'] : s['arrow__order--desc']}`}
                   ></div>
                 }
               </th>
@@ -156,33 +216,7 @@ const Transactions = () => {
           <tbody>
             {isLoading &&  <tr><th>Загрузка...</th></tr>}
             {isError   &&  <tr><th>Ошибка :(</th></tr>}
-            {isSuccess &&
-            data.transactions.map((element)=>{return(
-              <tr
-              className={element.type === 'income' ?
-              s['table__row-income']
-              :
-              s['table__row-expense']}
-              key={element.id}>
-                <th scope="row">
-                  {element.id}
-                  </th>
-                <td className={s['text--left']}>
-                  {element.description}
-                  </td>
-                <td className={s['text--left']}>
-                  {element.type}
-                  </td>
-                <td className={s['text--left']}>
-                  {element.category}
-                  </td>
-                <td className={s['text--center']}>
-                  {(new Date(element.date)).toISOString().split('T')[0]}</td>
-                <td className={s['text--right']}>
-                  {element.amount} $
-                  </td>
-              </tr>
-            )})}
+            {isSuccess && memoizedTbody}
           </tbody>
         </table>
         <div className={s.pagination__wrapper}>
@@ -191,7 +225,7 @@ const Transactions = () => {
             placeholder="Limit…"
             options={limitOptions}
             defaultValue={limitOptions.find(o => o.value === limit)}
-            onChange={handleLimitChange}
+            onChange={(options) => setLimit(options.value)}
             isSearchable={false}/>
           </div>
           <div className={s.pagination__pages}>
