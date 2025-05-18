@@ -21,12 +21,12 @@ class Requests{
     }
 
     async getIncome(){
-        const { data } = await axios.get<IIncome>(this.URL + '/income')
+        const { data } = await axios.get<IIncome[]>(this.URL + '/income')
         return data
     }
 
     async getExpense(){
-        const { data } = await axios.get<IExpense>(this.URL + '/summaryStats')
+        const { data } = await axios.get<IExpense[]>(this.URL + '/expense')
         return data
     }
 }

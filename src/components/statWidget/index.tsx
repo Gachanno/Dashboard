@@ -1,3 +1,4 @@
+import Loading from '../loading'
 import s from './style.module.scss'
 import { IPropsStatWidget } from './type'
 
@@ -9,7 +10,7 @@ const StatWidget = ({styles, icon, tittle, smallText, dataStat}: IPropsStatWidge
                 <h2 className={s.widget__title}>{tittle}</h2>
             </div>
             {
-                dataStat.isLoading && 'загрузка...'
+                dataStat.isLoading && <Loading/>
             }
             {
                 dataStat.isError && 'Ошибка'

@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import s from './style.module.scss'
 import { IPropsRTW } from './type'
+import Loading from '../loading'
 
 const RecentTransactionsWidget = ({icon, tittle, styles, dataTransaction}:IPropsRTW) => {
     const {data, isLoading, isError, isSuccess} = dataTransaction
@@ -34,7 +35,7 @@ const RecentTransactionsWidget = ({icon, tittle, styles, dataTransaction}:IProps
             {icon}
             <h2 className={s.widget__title}>{tittle}</h2>
         </div>
-        {isLoading && 'Загрузка...'}
+        {isLoading && <Loading/>}
         {isError && 'Ошибка :('}
         {isSuccess &&
         data.transactions.map((element) => {return(

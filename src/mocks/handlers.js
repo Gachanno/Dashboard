@@ -73,7 +73,7 @@ const transactionsResolver = (req) => {
     limit
   }
 
-  return HttpResponse.json(result);
+  return HttpResponse.json(result)
 };
 
 const transactionsHandler = http.get("/api/transactions", transactionsResolver);

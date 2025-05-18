@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import * as actionTable from '@/store/tableSlice'
 import { TFilter } from './type'
 import { filterConfig, FormDataI, initialState } from './filterFormConfig'
+import Loading from '@/components/loading'
 
 const limitOptions: TLimitOption[] = [
   { value: 10, label: '10' },
@@ -214,7 +215,7 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
-            {isLoading &&  <tr><th>Загрузка...</th></tr>}
+            {isLoading &&  <tr><th><Loading/></th></tr>}
             {isError   &&  <tr><th>Ошибка :(</th></tr>}
             {isSuccess && memoizedTbody}
           </tbody>

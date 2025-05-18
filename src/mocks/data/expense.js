@@ -1,38 +1,38 @@
 export default [
     {
-        "category": "groceries",
+        "category": "Groceries",
         "amount": 1663.87
     },
     {
-        "category": "education",
+        "category": "Education",
         "amount": 8982.86
     },
     {
-        "category": "health",
+        "category": "Health",
         "amount": 2142.37
     },
     {
-        "category": "utilities",
+        "category": "Utilities",
         "amount": 6239.78
     },
     {
-        "category": "rent",
+        "category": "Rent",
         "amount": 5258.66
     },
     {
-        "category": "transport",
+        "category": "Transport",
         "amount": 5478.89
     },
     {
-        "category": "dining",
+        "category": "Dining",
         "amount": 3536.44
     },
     {
-        "category": "shopping",
+        "category": "Shopping",
         "amount": 2227.14
     },
     {
-        "category": "entertainment",
+        "category": "Entertainment",
         "amount": 4308.07
     }
 ]

@@ -1,12 +1,10 @@
-import { NavLink, useLocation } from 'react-router'
+import { NavLink } from 'react-router'
 import s from './style.module.scss'
 import TransactionIcon from '@/assets/icons/transaction.svg'
 import IncomeIcon from '@/assets/icons/increase.svg'
 import ExpenseIcon from '@/assets/icons/expense.svg'
 
 const Navigation = () => {
-  const { pathname } = useLocation()
-  
   return (
     <nav>
       <ul className={s.navigation__list}>
