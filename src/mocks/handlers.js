@@ -11,8 +11,9 @@ const sortedBy = (field, order) =>{
     let va = a[field], vb = b[field];
 
     if (field === 'date') {
-      va = new Date(va);
-      vb = new Date(vb);
+      va = (new Date(va)).getTime();
+      vb = (new Date(vb)).getTime();
+      console.log(va, vb)
     }
 
     if (typeof va === 'number' && typeof vb === 'number') {
