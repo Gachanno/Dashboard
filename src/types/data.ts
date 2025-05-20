@@ -24,8 +24,8 @@ interface ITransactionsParams {
     sortBy?: string;
     order?: 'asc'|'desc';
     filter?: {
-        min?: number;
-        max?: number;
+        min?: string;
+        max?: string;
     }
 }
 

@@ -12,8 +12,8 @@ export type TSort = {
 }
 
 export type TFilter = {
-    min?: number,
-    max?: number,
+    min?: string,
+    max?: string,
 }
 
 export type TFilterAction = {

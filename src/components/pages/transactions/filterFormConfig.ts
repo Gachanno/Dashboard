@@ -1,13 +1,10 @@
-type Config = ( React.InputHTMLAttributes<HTMLInputElement> & {
-    name: keyof FormDataI;
-    label?: string;
-    validate?: (state: FormDataI) => boolean;
-})[]
+import { TFilter } from "./type";
 
-export type FormDataI = {
-    min: string
-    max: string
-}
+type Config = ( React.InputHTMLAttributes<HTMLInputElement> & {
+    name: keyof TFilter;
+    label?: string;
+    validate?: (state: TFilter) => boolean;
+})[]
 
 export const filterConfig:Config = [
     {
@@ -28,7 +25,7 @@ export const filterConfig:Config = [
     }
 ]
 
-export const initialState: FormDataI = {
+export const initialState: TFilter = {
     min: '',
     max: ''
 }

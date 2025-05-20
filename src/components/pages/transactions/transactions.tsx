@@ -10,7 +10,7 @@ import { RootState } from '@/store/store'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import * as actionTable from '@/store/tableSlice'
 import { TFilter } from './type'
-import { filterConfig, FormDataI, initialState } from './filterFormConfig'
+import { filterConfig, initialState } from './filterFormConfig'
 import Loading from '@/components/loading'
 
 const limitOptions: TLimitOption[] = [
@@ -38,7 +38,7 @@ const Transactions = () => {
 
     value = value.replace(/[^0-9]/g, '')
 
-    setFormState((prev:FormDataI) => ({
+    setFormState((prev:TFilter) => ({
       ...prev, 
       [name]: value
     }))
@@ -52,6 +52,13 @@ const Transactions = () => {
       data[key] = value.toString()
     })
     setFilter(data)
+  }
+  
+    const onReset = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setFilter({})
+    e.target.reset()
+    setFormState(initialState)
   }
 
   const {page, pages, limit, sort, filter} = useAppSelector((state: RootState) => state.table)
@@ -119,7 +126,7 @@ const Transactions = () => {
     <main className={s.main}>
       <h1>Transactions</h1>
       <section className={s.table__wrapper}>
-        <form action="" className={s.filter__form} onSubmit={onSubmit}>
+        <form action="" className={s.filter__form} onSubmit={onSubmit} onReset={onReset}>
           <h2>Фильтры</h2>
           {filterConfig.map(({label, ...item}) =>{ 
           return(

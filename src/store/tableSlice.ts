@@ -57,8 +57,8 @@ export const tableSlice = createSlice({
       }
     },
     setFilter(state, action:PayloadAction<TFilterAction>) {
-      if(!!action.payload.min) state.filter.min = parseInt(action.payload.min)
-      if(!!action.payload.max) state.filter.max = parseInt(action.payload.max)
+      if(!!action.payload.min) state.filter.min = action.payload.min
+      if(!!action.payload.max) state.filter.max = action.payload.max
     },
     clearFilter(state) {
       state.filter = {}
