@@ -9,7 +9,12 @@ export function buildPlugins({mode, paths}){
     const isProd = mode === 'production'
 
     const plugins = [
-        new HtmlWebpackPlugin({ template: paths.html })
+        new HtmlWebpackPlugin({ template: paths.html }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'public/mockServiceWorker.js', to: '' }
+            ]
+        })
     ]
 
     if(isDev) {
